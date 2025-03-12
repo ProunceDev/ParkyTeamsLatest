@@ -1,0 +1,8 @@
+name: ParkyTeamsLatest
+version: '1.0-BETA'
+main: org.ProunceDev.parkyTeamsLatest.ParkyTeamsLatest
+api-version: '1.21'
+commands:
+  team:
+    description: Allows you to create, invite, kick, and disband teams.
+    usage: /team <create | invite | kick | disband> <team name | player>
