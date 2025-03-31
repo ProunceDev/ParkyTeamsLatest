@@ -19,13 +19,18 @@ import java.util.UUID;
 public class Commands implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender commandSender, Command command, @NotNull String label, String @NotNull [] args) {
         if (command.getName().equalsIgnoreCase("team")) {
             String action = args[0];
 
             if (commandSender instanceof Player sender) {
                 String teamName = TeamManager.getPlayerTeam(sender);
                 if (action.equalsIgnoreCase("create")) {
+
+                    if (DeathManager.hasPlayerDied(sender)) {
+                        commandSender.sendMessage("You can't create a team if you have died.");
+                        return true;
+                    }
 
                     if (teamName != null) {
                         commandSender.sendMessage("You can't create a team if you are already in one.");
@@ -132,6 +137,11 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
                     }
 
+                    if (DeathManager.hasPlayerDied(playerToInvite)) {
+                        commandSender.sendMessage("You can't invite someone that has already died.");
+                        return true;
+                    }
+
                     if (playerToInvite.getUniqueId() == sender.getUniqueId()) {
                         commandSender.sendMessage("You can't invite yourself.");
                         return true;
@@ -177,6 +187,11 @@ public class Commands implements CommandExecutor, TabCompleter {
 
                     if (!InviteManager.isInvited(sender, args[1])) {
                         commandSender.sendMessage("You aren't invited to that team, or it doesn't exist.");
+                        return true;
+                    }
+
+                    if (DeathManager.hasPlayerDied(sender)) {
+                        commandSender.sendMessage("You can't join a team if you've already died.");
                         return true;
                     }
 
@@ -281,7 +296,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                     commandSender.sendMessage(header);
                     for (UUID uuid : teamData.members) {
                         OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-                        if (TeamManager.isTeamOwner((Player) player, teamData.name)) {
+                        if (TeamManager.isTeamOwner(uuid, teamData.name)) {
                             Component message = Component.text("> ", NamedTextColor.AQUA)
                                     .append(Component.text("[Owner] ", NamedTextColor.RED))
                                     .append(Component.text(player.getName(), NamedTextColor.YELLOW));
@@ -317,7 +332,7 @@ public class Commands implements CommandExecutor, TabCompleter {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("invite")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (TeamManager.getPlayerTeam(player) == null) {
+                    if (TeamManager.getPlayerTeam(player) == null && !DeathManager.hasPlayerDied(player)) {
                         suggestions.add(player.getName());
                     }
                 }

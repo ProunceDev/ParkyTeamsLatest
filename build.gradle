@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.ProunceDev'
-version = '1.0-BETA'
+version = '1.2-BETA'
 
 repositories {
     mavenCentral()
@@ -15,10 +15,14 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        url = 'https://repo.extendedclip.com/releases/'
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 }
 
 def targetJavaVersion = 21
