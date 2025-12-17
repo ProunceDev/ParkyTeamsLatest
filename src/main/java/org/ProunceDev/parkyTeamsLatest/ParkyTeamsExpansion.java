@@ -2,6 +2,8 @@ package org.ProunceDev.parkyTeamsLatest;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +33,16 @@ public class ParkyTeamsExpansion extends PlaceholderExpansion {
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         if (identifier.equals("teams_remaining")) {
-            return String.valueOf(TeamManager.getTeams().size());
+            long nonOpTeamCount = TeamManager.getTeams().stream()
+                    .filter(team -> {
+                        OfflinePlayer ownerPlayer = Bukkit.getOfflinePlayer(team.owner);
+                        return !ownerPlayer.isOp();  // exclude if OP
+                    })
+                    .count();
+
+            return String.valueOf(nonOpTeamCount);
         }
+
         if (identifier.equals("formatted_name")) {
             String teamName = TeamManager.getPlayerTeam(player);
 

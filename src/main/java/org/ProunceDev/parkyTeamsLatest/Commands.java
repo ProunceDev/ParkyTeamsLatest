@@ -126,10 +126,10 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
                     }
 
-                    if (TeamManager.getNumberOfTeamMembers(teamName) >= 3) {
-                        commandSender.sendMessage("You can't invite anymore people since you are already at the max of 3.");
-                        return true;
-                    }
+                    //if (TeamManager.getNumberOfTeamMembers(teamName) >= 3) {
+                    //    commandSender.sendMessage("You can't invite anymore people since you are already at the max of 3.");
+                    //    return true;
+                    //}
 
                     Player playerToInvite = Bukkit.getPlayer(args[1]);
                     if (playerToInvite == null) {
@@ -195,10 +195,10 @@ public class Commands implements CommandExecutor, TabCompleter {
                         return true;
                     }
 
-                    if (TeamManager.getNumberOfTeamMembers(args[1]) >= 3) {
-                        commandSender.sendMessage("You can't join since this team is already at the max of 3.");
-                        return true;
-                    }
+                    //if (TeamManager.getNumberOfTeamMembers(args[1]) >= 3) {
+                    //    commandSender.sendMessage("You can't join since this team is already at the max of 3.");
+                    //    return true;
+                    //}
 
                     TeamManager.addMember(args[1], sender);
                     InviteManager.removeAllInvites(sender);
